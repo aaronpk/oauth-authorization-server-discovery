@@ -9,27 +9,28 @@ Expires: 19 May 2023                                              Google
                                                         15 November 2022
 
 
-            OAuth 2.0 Authorization Server Location Response
-      draft-parecki-authorization-server-location-response-latest
+                OAuth 2.0 Authorization Server Discovery
+          draft-parecki-authorization-server-discovery-latest
 
 Abstract
 
-   TODO Abstract
+   This specification enables configuration of an OAuth client by
+   providing the client with only the location of a resource server, by
+   providing a mechanism for a resource server to indicate which
+   authorization server it uses.
 
 About This Document
 
    This note is to be removed before publishing as an RFC.
 
    The latest revision of this draft can be found at
-   https://aaronpk.github.io/oauth-authorization-server-location-
-   response/draft-parecki-authorization-server-location-response.html.
-   Status information for this document may be found at
-   https://datatracker.ietf.org/doc/draft-parecki-authorization-server-
-   location-response/.
+   https://aaronpk.github.io/oauth-authorization-server-discovery/draft-
+   parecki-authorization-server-discovery.html.  Status information for
+   this document may be found at https://datatracker.ietf.org/doc/draft-
+   parecki-authorization-server-discovery/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/aaronpk/oauth-authorization-server-location-
-   response.
+   https://github.com/aaronpk/oauth-authorization-server-discovery.
 
 Status of This Memo
 
@@ -66,6 +67,7 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
+     2.1.  Terminology
    3.  Security Considerations
    4.  IANA Considerations
    5.  Normative References
@@ -74,7 +76,11 @@ Table of Contents
 
 1.  Introduction
 
-   TODO Introduction
+   In order to obtain an access token to access a resource server, an
+   OAuth 2.0 client needs to know the authorization server to use for
+   the request.  [RFC6749] does not provide any mechanisms for
+   authorization server discovery, and other OAuth 2.0 extensions have
+   left authorization server discovery out of scope as well.
 
 2.  Conventions and Definitions
 
@@ -83,6 +89,15 @@ Table of Contents
    "OPTIONAL" in this document are to be interpreted as described in
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
+
+2.1.  Terminology
+
+   This specification uses the terms "Access Token", "Authorization
+   Code", "Authorization Endpoint", "Authorization Server", "Client",
+   "Client Authentication", "Client Identifier", "Client Secret", "Grant
+   Type", "Protected Resource", "Redirection URI", "Refresh Token",
+   "Resource Owner", "Resource Server", "Response Type", and "Token
+   Endpoint" defined by [RFC6749].
 
 3.  Security Considerations
 
