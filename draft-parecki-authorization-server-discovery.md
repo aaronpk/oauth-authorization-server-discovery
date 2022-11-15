@@ -136,7 +136,7 @@ This specification introduces a new parameter in the `WWW-Authenticate` response
 
 The response below is an example of a `WWW-Authenticate` header that includes the `issuer` URL.
 
-    HTTP/1.1 401 Unauthorized
+    HTTP/1.1 400 Bad Request
     WWW-Authenticate: Bearer error="invalid_request",
       error_description="No access token was provided in this request",
       issuer="https://as.example.com/"
