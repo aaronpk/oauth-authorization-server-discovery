@@ -82,6 +82,16 @@ Table of Contents
    authorization server discovery, and other OAuth 2.0 extensions have
    left authorization server discovery out of scope as well.
 
+   This specification provides a mechanism for a resource server to
+   indicate which authorization server it accepts access tokens from, so
+   that an OAuth client can be configured with only the location of the
+   resource server.
+
+   For example, an email client could provide an interface for a user to
+   enter the URL of their JMAP server.  The email client would make a
+   request to the server to discover the authorization server, then
+   initiate an OAuth authorization flow to obtain tokens.
+
 2.  Conventions and Definitions
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
