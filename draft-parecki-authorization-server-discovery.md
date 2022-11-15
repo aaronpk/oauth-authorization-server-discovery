@@ -51,6 +51,10 @@ This specification enables configuration of an OAuth client by providing the cli
 
 In order to obtain an access token to access a resource server, an OAuth 2.0 client needs to know the authorization server to use for the request. {{RFC6749}} does not provide any mechanisms for authorization server discovery, and other OAuth 2.0 extensions have left authorization server discovery out of scope as well.
 
+This specification provides a mechanism for a resource server to indicate which authorization server it accepts access tokens from, so that an OAuth client can be configured with only the location of the resource server.
+
+For example, an email client could provide an interface for a user to enter the URL of their JMAP server. The email client would make a request to the server to discover the authorization server, then initiate an OAuth authorization flow to obtain tokens.
+
 
 # Conventions and Definitions
 
