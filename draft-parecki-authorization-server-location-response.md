@@ -2,7 +2,7 @@
 title: "OAuth 2.0 Authorization Server Location Response"
 category: info
 
-docname: draft-parecki-authorization-server-location-response
+docname: draft-parecki-authorization-server-location-response-latest
 submissiontype: IETF
 number:
 date:
