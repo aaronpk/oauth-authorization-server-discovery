@@ -1,6 +1,6 @@
 ---
 title: "OAuth 2.0 Authorization Server Location Response"
-category: info
+category: std
 
 docname: draft-parecki-authorization-server-location-response-latest
 submissiontype: IETF
@@ -8,12 +8,13 @@ number:
 date:
 consensus: true
 v: 3
-# area: Security
-# workgroup: OAuth Working Group
+area: Security
+workgroup: OAuth Working Group
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - authorization-server
+ - oauth
+ - resource-server
+ - authorization
 venue:
 #  group: OAuth
 #  type: Working Group
@@ -33,6 +34,7 @@ author:
     email: bemasc@google.com
 
 normative:
+  RFC6749:
   RFC6750:
 
 informative:
