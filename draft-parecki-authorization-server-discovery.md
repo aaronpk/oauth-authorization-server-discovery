@@ -85,7 +85,7 @@ and "Token Endpoint" defined by {{RFC6749}}, as well as
 
 The following is a typical end-to-end flow implemented according to the specification. Note that while this example uses the OAuth 2.0 Authorization Code flow, a similar sequence could also be implemented with any other OAuth flow as well.
 
-```
+~~~~~~~~~~
 +----------+                                          +--------------+
 |          |                                          |              |
 |          |-------(1) resource request-------------->|              |
@@ -116,7 +116,7 @@ The following is a typical end-to-end flow implemented according to the specific
 |          |<-------- (6) access token --------------|               |
 |          |                                         |               |
 +----------+                                         +---------------+
-```
+~~~~~~~~~~
 
 1. The client makes a request to a protected resource without presenting an access token.
 2. The resource server responds with the `WWW-Authenticate` header including the issuer URI of the authorization server.
@@ -136,12 +136,10 @@ This specification introduces a new parameter in the `WWW-Authenticate` response
 
 The response below is an example of a `WWW-Authenticate` header that includes the `issuer` URL.
 
-```
-HTTP/1.1 401 Unauthorized
-WWW-Authenticate: Bearer error="invalid_request",
-  error_description="No access token was provided in this request",
-  issuer="https://as.example.com/"
-```
+    HTTP/1.1 401 Unauthorized
+    WWW-Authenticate: Bearer error="invalid_request",
+      error_description="No access token was provided in this request",
+      issuer="https://as.example.com/"
 
 The HTTP status code and `error` string in the response are defined by {{RFC6750}}.
 
