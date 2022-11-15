@@ -8,19 +8,19 @@ number:
 date:
 consensus: true
 v: 3
-area: Security
-workgroup: OAuth Working Group
+# area: Security
+# workgroup: OAuth Working Group
 keyword:
  - next generation
  - unicorn
  - sparkling distributed ledger
 venue:
-  group: OAuth
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: aaronpk/oauth-authorization-server-location-response
-  latest: https://example.com/LATEST
+#  group: OAuth
+#  type: Working Group
+#  mail: WG@example.com
+#  arch: https://example.com/WG
+  github: "aaronpk/oauth-authorization-server-location-response"
+  latest: "https://aaronpk.github.io/oauth-authorization-server-location-response/draft-parecki-authorization-server-location-response.html"
 
 author:
   -
