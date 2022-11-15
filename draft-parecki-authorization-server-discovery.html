@@ -1324,7 +1324,7 @@ and "Token Endpoint" defined by <span>[<a href="#RFC6749" class="cite xref">RFC6
 <p id="section-4-3">The response below is an example of a <code>WWW-Authenticate</code> header that includes the <code>issuer</code> URL.<a href="#section-4-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4-4">
 <pre>
-HTTP/1.1 401 Unauthorized
+HTTP/1.1 400 Bad Request
 WWW-Authenticate: Bearer error="invalid_request",
   error_description="No access token was provided in this request",
   issuer="https://as.example.com/"
