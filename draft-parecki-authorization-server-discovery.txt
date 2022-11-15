@@ -139,20 +139,36 @@ Table of Contents
    Authorization Code flow, a similar sequence could also be implemented
    with any other OAuth flow as well.
 
-   +----------+ +--------------+ | | | | | |-------(1) resource
-   request-------------->| | | | | | | |<--(2) authorization server
-   issuer--------| Resource | | | | Server | |
-   Client | | | | |-------(7) resource request
-   ------------->| | | | | | | |<-----(8) protected resource
-   -------------| | | | +--------------+ | | | | | |
-   +---------------+ | |-------(3) AS metadata
-   request---------->| | | | | | | |<-----(4) AS metadata
-   response-----------| | | | | | | |
-   +-------+ | | | |->| | | | | | | |--(5) authorization
-   request-->| | | | | User | | | | | |
-   Agent |<-----------[...]------------>| Authorization | | | | | |
-   Server | | |<-| | | | | | +-------+ | | | | | | | |<-------- (6)
-   access token --------------| | | | | | +----------+ +---------------+
+  +----------+                                          +--------------+
+  |          |                                          |              |
+  |          |-------(1) resource request-------------->|              |
+  |          |                                          |              |
+  |          |<--(2) authorization server issuer--------|   Resource   |
+  |          |                                          |    Server    |
+  |  Client  |                                          |              |
+  |          |-------(7) resource request ------------->|              |
+  |          |                                          |              |
+  |          |<-----(8) protected resource -------------|              |
+  |          |                                          +--------------+
+  |          |
+  |          |
+  |          |                                         +---------------+
+  |          |-------(3) AS metadata request---------->|               |
+  |          |                                         |               |
+  |          |<-----(4) AS metadata response-----------|               |
+  |          |                                         |               |
+  |          |  +-------+                              |               |
+  |          |->|       |                              |               |
+  |          |  |       |--(5) authorization request-->|               |
+  |          |  | User  |                              |               |
+  |          |  | Agent |<-----------[...]------------>| Authorization |
+  |          |  |       |                              |     Server    |
+  |          |<-|       |                              |               |
+  |          |  +-------+                              |               |
+  |          |                                         |               |
+  |          |<-------- (6) access token --------------|               |
+  |          |                                         |               |
+  +----------+                                         +---------------+
 
    1.  The client makes a request to a protected resource without
        presenting an access token.
@@ -188,9 +204,10 @@ Table of Contents
    The response below is an example of a WWW-Authenticate header that
    includes the issuer URL.
 
-   HTTP/1.1 401 Unauthorized WWW-Authenticate: Bearer
-   error="invalid_request", error_description="No access token was
-   provided in this request", issuer="https://as.example.com/"
+   HTTP/1.1 401 Unauthorized
+   WWW-Authenticate: Bearer error="invalid_request",
+     error_description="No access token was provided in this request",
+     issuer="https://as.example.com/"
 
    The HTTP status code and error string in the response are defined by
    [RFC6750].
