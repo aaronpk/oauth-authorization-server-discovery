@@ -17,7 +17,7 @@
 /versioned/
 Gemfile.lock
 archive.json
-draft-parecki-authorization-server-location-response.xml
+draft-parecki-authorization-server-discovery.xml
 package-lock.json
 report.xml
 !requirements.txt

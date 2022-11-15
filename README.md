@@ -1,17 +1,18 @@
-# OAuth 2.0 Authorization Server Location Response
+# OAuth 2.0 Authorization Server Discovery
 
-This is the working area for the individual Internet-Draft, "OAuth 2.0 Authorization Server Location Response".
+This is the working area for the individual Internet-Draft, "OAuth 2.0 Authorization Server Discovery".
 
-* [Editor's Copy](https://aaronpk.github.io/oauth-authorization-server-location-response/#go.draft-parecki-authorization-server-location-response.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-parecki-authorization-server-location-response)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-parecki-authorization-server-location-response)
-* [Compare Editor's Copy to Individual Draft](https://aaronpk.github.io/oauth-authorization-server-location-response/#go.draft-parecki-authorization-server-location-response.diff)
-
+* [Editor's Copy](https://aaronpk.github.io/oauth-authorization-server-discovery/#go.draft-parecki-authorization-server-discovery.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-parecki-authorization-server-discovery)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-parecki-authorization-server-discovery)
+<!--
+* [Compare Editor's Copy to Individual Draft](https://aaronpk.github.io/oauth-authorization-server-discovery/#go.draft-parecki-authorization-server-discovery.diff)
+-->
 
 ## Contributing
 
 See the
-[guidelines for contributions](https://github.com/aaronpk/oauth-authorization-server-location-response/blob/main/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/aaronpk/oauth-authorization-server-discovery/blob/main/CONTRIBUTING.md).
 
 Contributions can be made by creating pull requests.
 The GitHub interface supports creating pull requests using the Edit (✏) button.
