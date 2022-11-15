@@ -2,9 +2,9 @@
 
 
 
-Network Working Group                                         A. Parecki
+OAuth Working Group                                           A. Parecki
 Internet-Draft                                                      Okta
-Intended status: Informational                            B. M. Schwartz
+Intended status: Standards Track                          B. M. Schwartz
 Expires: 19 May 2023                                              Google
                                                         15 November 2022
 
@@ -98,6 +98,10 @@ Table of Contents
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC6749]  Hardt, D., Ed., "The OAuth 2.0 Authorization Framework",
+              RFC 6749, DOI 10.17487/RFC6749, October 2012,
+              <https://www.rfc-editor.org/rfc/rfc6749>.
 
    [RFC6750]  Jones, M. and D. Hardt, "The OAuth 2.0 Authorization
               Framework: Bearer Token Usage", RFC 6750,
