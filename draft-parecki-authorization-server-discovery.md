@@ -37,34 +37,38 @@ normative:
   RFC6749:
   RFC6750:
   RFC8414:
-  RFC9110:
 
 informative:
-  RFC8707:
   RFC7591:
   I-D.ietf-oauth-step-up-authn-challenge:
 
 
 --- abstract
 
-This specification enables configuration of an OAuth client by providing the client with only the location of a resource server, by providing a mechanism for a resource server to indicate which authorization server it uses.
+This specification provides a mechanism for an access-controlled HTTP resource to indicate which OAuth authorization server it uses.  This allows the use of OAuth 2.0 authentication by clients that do not have prior knowledge about the resource server's configuration.
 
 
 --- middle
 
 # Introduction
 
-In order to obtain an access token to access a resource server, an OAuth 2.0 client needs to know the authorization server to use for the request. OAuth 2.0 ({{RFC6749}}) does not provide any mechanisms for authorization server discovery, and other OAuth 2.0 extensions have left authorization server discovery out of scope as well.
+In order to obtain an access token to access an HTTP resource, an OAuth 2.0 client needs to know the authorization server to use for the request. OAuth 2.0 {{RFC6749}} does not provide any mechanism for authorization server discovery, and other OAuth 2.0 extensions have left authorization server discovery out of scope as well.
 
 This specification provides a mechanism for a resource server to indicate which authorization server it accepts access tokens from, so that an OAuth client can be configured with only the location of the resource server.
 
-For example, an email client could provide an interface for a user to enter the URL of their JMAP server. The email client would make a request to the server to discover the authorization server, then initiate an OAuth authorization flow to obtain tokens.
+For example, an email client could provide an interface for a user to enter the URL of their JMAP server {{?RFC8620}}. The email client would make a request to the JMAP server to discover the authorization server, then initiate an OAuth authorization flow to obtain tokens.
 
-This specification extends the `WWW-Authenticate` response header defined by OAuth 2.0 Bearer Token Usage ({{RFC6750}}) to include the issuer URI (defined in OAuth 2.0 Authorization Server Metadata {{RFC8414}}) of the authorization server.
+This specification extends the `WWW-Authenticate` response header defined by OAuth 2.0 Bearer Token Usage {{RFC6750}} to include an optional issuer URI (defined in OAuth 2.0 Authorization Server Metadata {{RFC8414}}) of the authorization server.
 
 ## Usage and Applicability
 
-TODO: Clarify the scope of this extension, e.g. that it is intended only for use when it is not possible to pre-configure a client to know about both the AS and RS. Reference the Security Considerations section for more details about the dangers of RS-driven discovery.
+This specification is intended for use with access-controlled HTTP resources that conform to a standardized or well-known format or protocol.  When such resources proliferate, it becomes impractical for clients to maintain advance knowledge about every HTTP origin that offers such a resource.  Instead, in this specification, the client is presumed to be configured with a URI for this resource at runtime.
+
+At present, access control in this situation is generally limited to the HTTP Basic and Digest authentication schemes.  These schemes use only a simple username and password, and cannot support modern authentication capabilities such as Two-Factor Authentication, Single Sign-On, and password recovery flows.  This specification enables clients to make use of these richer authentication procedures via the OAuth 2.0 system.
+
+This specification can be used whether or not the authorization server has prior knowledge of the specific client implementation.  For example, an authorization server might restrict authorization to a small number of well-known clients, or it might authorize any compatible client.
+
+Authorization Server Discovery allows an unrecognized resource to initiate an OAuth 2.0 authentication procedure.  This carries significant security risks; see {{security}} for details.
 
 
 # Conventions and Definitions
@@ -136,10 +140,12 @@ This specification introduces a new parameter in the `WWW-Authenticate` response
 
 The response below is an example of a `WWW-Authenticate` header that includes the `issuer` URL.
 
+~~~http
     HTTP/1.1 400 Bad Request
     WWW-Authenticate: Bearer error="invalid_request",
       error_description="No access token was provided in this request",
-      issuer="https://as.example.com/"
+      issuer="https://as.example.com/issuer1"
+~~~
 
 The HTTP status code and `error` string in the response are defined by {{RFC6750}}.
 
@@ -150,13 +156,13 @@ The `issuer` parameter MAY be combined with other parameters defined in other ex
 
 The way in which the client identifier is established at the authorization server is out of scope of this specification.
 
-Because this specification is intended to be deployed in scenarios where clients are previously unknown to authorization servers, using pre-registered client identifiers is likely to be impractical.
+This specification is intended to be deployed in scenarios where the client has no prior knowledge about the resource server, and the resource server might or might not have prior knowledge about the client.
 
-There are some existing methods by which this could be accomplished, such as using Dynamic Client Registration {{RFC7591}} to register the client at the authorization server prior to initiating the authorization flow. Other extensions may define alternatives, such as using a URL to identify clients.
+There are some existing methods by which an unrecognized client can make use of an authorization server, such as using Dynamic Client Registration {{RFC7591}} to register the client prior to initiating the authorization flow. Future extensions may define alternatives, such as using a URL to identify clients.
 
 
 
-# Security Considerations
+# Security Considerations {#security}
 
 ## Server-Side Request Forgery (SSRF)
 
@@ -164,19 +170,25 @@ TODO
 
 ## Phishing
 
-TODO: Pre-configuration of the client is safer if possible, and this should only be used when pre-configuration is not possible.
+This specification assumes that the desired HTTP resource is identified by a user-selected URL.  If this resource is malicious or compromised, it could mislead the user into revealing their account credentials or authorizing unwanted access to OAuth-controlled capabilities.  This risk is reduced, but not eliminated, by following best practices for OAuth user interfaces, such as providing clear notice to the user, displaying the authorization server's domain name, supporting the use of password managers, and applying heuristic checks such as domain reputation.
 
-## Changed Issuer
-
-TODO: What should a client do if it makes a request to a previously-seen RS and it provides a different AS than before?
+If the client does know the identity of the authorization server in advance, it SHOULD ignore the `issuer=...` parameter.  Otherwise, an attacker who compromises the resource server could mount a phishing attack via the authorization flow.
 
 ## TODO ...
 
+# Operational Considerations
+
+## Changed Issuer
+
+The resource server MAY change its issuer URL at any time.  If the client receives an HTTP 401 indicating that its current token is no longer valid, it will restart the authentication procedure using the new issuer URL.
+
+## Compatibility with other authentication methods
+
+Resource servers MAY return other `WWW-Authenticate` headers indicating various authentication schemes.  This allows the resource server to support clients who may or may not implement this specification, and allows clients to choose their preferred authentication scheme.
 
 # IANA Considerations
 
-TBD
-
+N/A
 
 --- back
 
