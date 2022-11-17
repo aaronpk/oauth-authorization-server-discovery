@@ -1,0 +1,83 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2022-11-17T02:01:30.724702+00:00",
+  "repo": "aaronpk/oauth-authorization-server-discovery",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOIcPxbc5DDPeq",
+      "title": "Fill in missing text and various adjustments",
+      "url": "https://github.com/aaronpk/oauth-authorization-server-discovery/pull/1",
+      "state": "MERGED",
+      "author": "bemasc",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-11-16T18:40:27Z",
+      "updatedAt": "2022-11-16T18:47:28Z",
+      "baseRepository": "aaronpk/oauth-authorization-server-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "135ffbb2d3babf1ee5175f69724d99abb6ac5417",
+      "headRepository": "bemasc/oauth-authorization-server-discovery",
+      "headRefName": "bemasc-text",
+      "headRefOid": "390988043561acb1fd45c6cc2751ab455d38db9e",
+      "closedAt": "2022-11-16T18:47:28Z",
+      "mergedAt": "2022-11-16T18:47:28Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "c902d8517844a067c7ac953e85836e9b6084e241"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
