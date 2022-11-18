@@ -5,8 +5,8 @@
 OAuth Working Group                                           A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Standards Track                          B. M. Schwartz
-Expires: 20 May 2023                                              Google
-                                                        16 November 2022
+Expires: 22 May 2023                                              Google
+                                                        18 November 2022
 
 
                 OAuth 2.0 Authorization Server Discovery
@@ -16,8 +16,8 @@ Abstract
 
    This specification provides a mechanism for an access-controlled HTTP
    resource to indicate which OAuth authorization server it uses.  This
-   allows the use of OAuth 2.0 authentication by clients that do not
-   have prior knowledge about the resource server's configuration.
+   allows the use of OAuth 2.0 authorization by clients that do not have
+   prior knowledge about the resource server's configuration.
 
 About This Document
 
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 May 2023.
+   This Internet-Draft will expire on 22 May 2023.
 
 Copyright Notice
 
@@ -71,18 +71,17 @@ Table of Contents
      2.1.  Terminology
    3.  Protocol Overview
    4.  WWW-Authenticate Response
-   5.  Client Identifier and Client Authentication
-   6.  Security Considerations
-     6.1.  Server-Side Request Forgery (SSRF)
-     6.2.  Phishing
-     6.3.  TODO ...
-   7.  Operational Considerations
-     7.1.  Changed Issuer
-     7.2.  Compatibility with other authentication methods
-   8.  IANA Considerations
-   9.  References
-     9.1.  Normative References
-     9.2.  Informative References
+   5.  Changes to the issuer URL
+   6.  Client Identifier and Client Authentication
+   7.  Security Considerations
+     7.1.  Server-Side Request Forgery (SSRF)
+     7.2.  Phishing
+   8.  Operational Considerations
+     8.1.  Compatibility with other authentication methods
+   9.  IANA Considerations
+   10. References
+     10.1.  Normative References
+     10.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -134,8 +133,8 @@ Table of Contents
    compatible client.
 
    Authorization Server Discovery allows an unrecognized resource to
-   initiate an OAuth 2.0 authentication procedure.  This carries
-   significant security risks; see Section 6 for details.
+   initiate an OAuth 2.0 authorization flow.  This carries significant
+   security risks; see Section 7 for details.
 
 2.  Conventions and Definitions
 
@@ -239,7 +238,18 @@ Table of Contents
    other extensions, such as the max_age parameter defined by
    [I-D.ietf-oauth-step-up-authn-challenge].
 
-5.  Client Identifier and Client Authentication
+5.  Changes to the issuer URL
+
+   At any point, for any reason determined by the resource server, the
+   resource server MAY respond with a new WWW-Authenticate challenge,
+   including a new value for the issuer.  If the client receives a WWW-
+   Authenticate response indicating that its current token is no longer
+   valid, it is expected to start a new authorization flow, and SHOULD
+   use the new issuer value indicated in the response.  This enables a
+   resource server to change which authorization server it uses without
+   any other coordination with clients.
+
+6.  Client Identifier and Client Authentication
 
    The way in which the client identifier is established at the
    authorization server is out of scope of this specification.
@@ -255,13 +265,22 @@ Table of Contents
    authorization flow.  Future extensions may define alternatives, such
    as using a URL to identify clients.
 
-6.  Security Considerations
+7.  Security Considerations
 
-6.1.  Server-Side Request Forgery (SSRF)
+7.1.  Server-Side Request Forgery (SSRF)
 
-   TODO
+   The client is expected to fetch the authorization server metadata
+   based on the value of the issuer returned by the resource server.
+   Since this specification is designed to allow clients to interoperate
+   with RSs and ASs it has no prior knowledge of, this opens a risk for
+   SSRF attacks by malicious users or malicious resource servers.
+   Clients SHOULD take appropriate precautions against SSRF attacks,
+   such as blocking requests to internal IP address ranges.  Further
+   recommendations can be found in the OWASP SSRF Prevention Cheat Sheet
+   (https://cheatsheetseries.owasp.org/cheatsheets/
+   Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html).
 
-6.2.  Phishing
+7.2.  Phishing
 
    This specification assumes that the desired HTTP resource is
    identified by a user-selected URL.  If this resource is malicious or
@@ -278,31 +297,22 @@ Table of Contents
    attacker who compromises the resource server could mount a phishing
    attack via the authorization flow.
 
-6.3.  TODO ...
+8.  Operational Considerations
 
-7.  Operational Considerations
-
-7.1.  Changed Issuer
-
-   The resource server MAY change its issuer URL at any time.  If the
-   client receives an HTTP 401 indicating that its current token is no
-   longer valid, it will restart the authentication procedure using the
-   new issuer URL.
-
-7.2.  Compatibility with other authentication methods
+8.1.  Compatibility with other authentication methods
 
    Resource servers MAY return other WWW-Authenticate headers indicating
    various authentication schemes.  This allows the resource server to
    support clients who may or may not implement this specification, and
    allows clients to choose their preferred authentication scheme.
 
-8.  IANA Considerations
+9.  IANA Considerations
 
-   N/A
+   TBD
 
-9.  References
+10.  References
 
-9.1.  Normative References
+10.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -327,7 +337,7 @@ Table of Contents
               DOI 10.17487/RFC8414, June 2018,
               <https://www.rfc-editor.org/rfc/rfc8414>.
 
-9.2.  Informative References
+10.2.  Informative References
 
    [I-D.ietf-oauth-step-up-authn-challenge]
               Bertocci, V. and B. Campbell, "OAuth 2.0 Step-up
