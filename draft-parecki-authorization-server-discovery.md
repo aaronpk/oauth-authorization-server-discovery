@@ -45,7 +45,7 @@ informative:
 
 --- abstract
 
-This specification provides a mechanism for an access-controlled HTTP resource to indicate which OAuth authorization server it uses.  This allows the use of OAuth 2.0 authentication by clients that do not have prior knowledge about the resource server's configuration.
+This specification provides a mechanism for an access-controlled HTTP resource to indicate which OAuth authorization server it uses.  This allows the use of OAuth 2.0 authorization by clients that do not have prior knowledge about the resource server's configuration.
 
 
 --- middle
@@ -68,7 +68,7 @@ At present, access control in this situation is generally limited to the HTTP Ba
 
 This specification can be used whether or not the authorization server has prior knowledge of the specific client implementation.  For example, an authorization server might restrict authorization to a small number of well-known clients, or it might authorize any compatible client.
 
-Authorization Server Discovery allows an unrecognized resource to initiate an OAuth 2.0 authentication procedure.  This carries significant security risks; see {{security}} for details.
+Authorization Server Discovery allows an unrecognized resource to initiate an OAuth 2.0 authorization flow.  This carries significant security risks; see {{security}} for details.
 
 
 # Conventions and Definitions
@@ -152,6 +152,11 @@ The HTTP status code and `error` string in the response are defined by {{RFC6750
 The `issuer` parameter MAY be combined with other parameters defined in other extensions, such as the `max_age` parameter defined by {{I-D.ietf-oauth-step-up-authn-challenge}}.
 
 
+# Changes to the issuer URL
+
+At any point, for any reason determined by the resource server, the resource server MAY respond with a new `WWW-Authenticate` challenge, including a new value for the `issuer`. If the client receives a `WWW-Authenticate` response indicating that its current token is no longer valid, it is expected to start a new authorization flow, and SHOULD use the new issuer value indicated in the response. This enables a resource server to change which authorization server it uses without any other coordination with clients.
+
+
 # Client Identifier and Client Authentication
 
 The way in which the client identifier is established at the authorization server is out of scope of this specification.
@@ -166,7 +171,8 @@ There are some existing methods by which an unrecognized client can make use of 
 
 ## Server-Side Request Forgery (SSRF)
 
-TODO
+The client is expected to fetch the authorization server metadata based on the value of the `issuer` returned by the resource server. Since this specification is designed to allow clients to interoperate with RSs and ASs it has no prior knowledge of, this opens a risk for SSRF attacks by malicious users or malicious resource servers. Clients SHOULD take appropriate precautions against SSRF attacks, such as blocking requests to internal IP address ranges. Further recommendations can be found in the [OWASP SSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html).
+
 
 ## Phishing
 
@@ -174,21 +180,20 @@ This specification assumes that the desired HTTP resource is identified by a use
 
 If the client does know the identity of the authorization server in advance, it SHOULD ignore the `issuer=...` parameter.  Otherwise, an attacker who compromises the resource server could mount a phishing attack via the authorization flow.
 
-## TODO ...
+
+
 
 # Operational Considerations
-
-## Changed Issuer
-
-The resource server MAY change its issuer URL at any time.  If the client receives an HTTP 401 indicating that its current token is no longer valid, it will restart the authentication procedure using the new issuer URL.
 
 ## Compatibility with other authentication methods
 
 Resource servers MAY return other `WWW-Authenticate` headers indicating various authentication schemes.  This allows the resource server to support clients who may or may not implement this specification, and allows clients to choose their preferred authentication scheme.
 
+
 # IANA Considerations
 
-N/A
+TBD
+
 
 --- back
 
