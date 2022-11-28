@@ -2,7 +2,7 @@
 title: "OAuth 2.0 Authorization Server Discovery"
 category: std
 
-docname: draft-parecki-authorization-server-discovery-latest
+docname: draft-parecki-oauth-authorization-server-discovery-latest
 submissiontype: IETF
 number:
 date:
@@ -21,7 +21,7 @@ venue:
 #  mail: WG@example.com
 #  arch: https://example.com/WG
   github: "aaronpk/oauth-authorization-server-discovery"
-  latest: "https://aaronpk.github.io/oauth-authorization-server-discovery/draft-parecki-authorization-server-discovery.html"
+  latest: "https://aaronpk.github.io/oauth-authorization-server-discovery/draft-parecki-oauth-authorization-server-discovery.html"
 
 author:
   -
