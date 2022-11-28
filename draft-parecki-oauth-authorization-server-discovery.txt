@@ -15,9 +15,10 @@ Expires: 1 June 2023                                              Google
 Abstract
 
    This specification provides a mechanism for an access-controlled HTTP
-   resource to indicate which OAuth authorization server it uses.  This
-   allows the use of OAuth 2.0 authorization by clients that do not have
-   prior knowledge about the resource server's configuration.
+   resource to indicate which OAuth authorization server it is protected
+   by.  This allows the use of OAuth 2.0 authorization by clients that
+   do not have prior knowledge about the resource server's
+   configuration.
 
 About This Document
 
@@ -95,9 +96,9 @@ Table of Contents
    left authorization server discovery out of scope as well.
 
    This specification provides a mechanism for a resource server to
-   indicate which authorization server it accepts access tokens from, so
-   that an OAuth client can be configured with only the location of the
-   resource server.
+   indicate which authorization server it accepts access tokens issued
+   by, so that an OAuth client can be configured with only the location
+   of the resource server.
 
    For example, an email client could provide an interface for a user to
    enter the URL of their JMAP server [RFC8620].  The email client would
