@@ -1,0 +1,377 @@
+
+
+
+
+OAuth Working Group                                           A. Parecki
+Internet-Draft                                                      Okta
+Intended status: Standards Track                          B. M. Schwartz
+Expires: 1 June 2023                                              Google
+                                                        28 November 2022
+
+
+                OAuth 2.0 Authorization Server Discovery
+       draft-parecki-oauth-authorization-server-discovery-latest
+
+Abstract
+
+   This specification provides a mechanism for an access-controlled HTTP
+   resource to indicate which OAuth authorization server it is protected
+   by.  This allows the use of OAuth 2.0 authorization by clients that
+   do not have prior knowledge about the resource server's
+   configuration.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at
+   https://aaronpk.github.io/oauth-authorization-server-discovery/draft-
+   parecki-oauth-authorization-server-discovery.html.  Status
+   information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-parecki-oauth-authorization-
+   server-discovery/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/aaronpk/oauth-authorization-server-discovery.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 1 June 2023.
+
+Copyright Notice
+
+   Copyright (c) 2022 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+     1.1.  Usage and Applicability
+   2.  Conventions and Definitions
+     2.1.  Terminology
+   3.  Protocol Overview
+   4.  WWW-Authenticate Response
+   5.  Changes to the issuer URL
+   6.  Client Identifier and Client Authentication
+   7.  Security Considerations
+     7.1.  Server-Side Request Forgery (SSRF)
+     7.2.  Phishing
+   8.  Operational Considerations
+     8.1.  Compatibility with other authentication methods
+   9.  IANA Considerations
+   10. References
+     10.1.  Normative References
+     10.2.  Informative References
+   Acknowledgments
+   Authors' Addresses
+
+1.  Introduction
+
+   In order to obtain an access token to access an HTTP resource, an
+   OAuth 2.0 client needs to know the authorization server to use for
+   the request.  OAuth 2.0 [RFC6749] does not provide any mechanism for
+   authorization server discovery, and other OAuth 2.0 extensions have
+   left authorization server discovery out of scope as well.
+
+   This specification provides a mechanism for a resource server to
+   indicate which authorization server it accepts access tokens issued
+   by, so that an OAuth client can be configured with only the location
+   of the resource server.
+
+   For example, an email client could provide an interface for a user to
+   enter the URL of their JMAP server [RFC8620].  The email client would
+   make a request to the JMAP server to discover the authorization
+   server, then initiate an OAuth authorization flow to obtain tokens.
+
+   This specification extends the WWW-Authenticate response header
+   defined by OAuth 2.0 Bearer Token Usage [RFC6750] to include an
+   optional issuer URI (defined in OAuth 2.0 Authorization Server
+   Metadata [RFC8414]) of the authorization server.
+
+1.1.  Usage and Applicability
+
+   This specification is intended for use with access-controlled HTTP
+   resources that conform to a standardized or well-known format or
+   protocol.  When such resources proliferate, it becomes impractical
+   for clients to maintain advance knowledge about every HTTP origin
+   that offers such a resource.  Instead, in this specification, the
+   client is presumed to be configured with a URI for this resource at
+   runtime.
+
+   At present, access control in this situation is generally limited to
+   the HTTP Basic and Digest authentication schemes.  These schemes use
+   only a simple username and password, and cannot support modern
+   authentication capabilities such as Two-Factor Authentication, Single
+   Sign-On, and password recovery flows.  This specification enables
+   clients to make use of these richer authentication procedures via the
+   OAuth 2.0 system.
+
+   This specification can be used whether or not the authorization
+   server has prior knowledge of the specific client implementation.
+   For example, an authorization server might restrict authorization to
+   a small number of well-known clients, or it might authorize any
+   compatible client.
+
+   Authorization Server Discovery allows an unrecognized resource to
+   initiate an OAuth 2.0 authorization flow.  This carries significant
+   security risks; see Section 7 for details.
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+2.1.  Terminology
+
+   This specification uses the terms "Access Token", "Authorization
+   Code", "Authorization Endpoint", "Authorization Server", "Client",
+   "Client Authentication", "Client Identifier", "Client Secret", "Grant
+   Type", "Protected Resource", "Redirection URI", "Refresh Token",
+   "Resource Owner", "Resource Server", "Response Type", and "Token
+   Endpoint" defined by [RFC6749], as well as "Issuer", and "Issuer
+   Identifier" defined by [RFC8414].
+
+3.  Protocol Overview
+
+   The following is a typical end-to-end flow implemented according to
+   the specification.  Note that while this example uses the OAuth 2.0
+   Authorization Code flow, a similar sequence could also be implemented
+   with any other OAuth flow as well.
+
+  +----------+                                          +--------------+
+  |          |                                          |              |
+  |          |-------(1) resource request-------------->|              |
+  |          |                                          |              |
+  |          |<--(2) authorization server issuer--------|   Resource   |
+  |          |                                          |    Server    |
+  |  Client  |                                          |              |
+  |          |-------(7) resource request ------------->|              |
+  |          |                                          |              |
+  |          |<-----(8) protected resource -------------|              |
+  |          |                                          +--------------+
+  |          |
+  |          |
+  |          |                                         +---------------+
+  |          |-------(3) AS metadata request---------->|               |
+  |          |                                         |               |
+  |          |<-----(4) AS metadata response-----------|               |
+  |          |                                         |               |
+  |          |  +-------+                              |               |
+  |          |->|       |                              |               |
+  |          |  |       |--(5) authorization request-->|               |
+  |          |  | User  |                              |               |
+  |          |  | Agent |<-----------[...]------------>| Authorization |
+  |          |  |       |                              |     Server    |
+  |          |<-|       |                              |               |
+  |          |  +-------+                              |               |
+  |          |                                         |               |
+  |          |<-------- (6) access token --------------|               |
+  |          |                                         |               |
+  +----------+                                         +---------------+
+
+   1.  The client makes a request to a protected resource without
+       presenting an access token.
+
+   2.  The resource server responds with the WWW-Authenticate header
+       including the issuer URI of the authorization server.
+
+   3.  The client builds the authorization server metadata URL from the
+       provided issuer identifier according to [RFC8414], and makes a
+       request to fetch the authorization server metadata.
+
+   4.  The authorization server responds with the metadata document
+       according to [RFC8414].
+
+   5.  The client directs the user agent to the authorization server to
+       begin the authorization flow.
+
+   6.  The authorization exchange is completed and the authorization
+       server returns an access token to the client.
+
+   7.  The client repeats the resource request from step 1, presenting
+       the newly obtained access token.
+
+   8.  The resource server returns the requested protected resource.
+
+4.  WWW-Authenticate Response
+
+   This specification introduces a new parameter in the WWW-Authenticate
+   response to indicate the issuer URI of the authorization server:
+
+   issuer  The issuer identifier of the authorization server.
+
+   The response below is an example of a WWW-Authenticate header that
+   includes the issuer URL.
+
+       HTTP/1.1 400 Bad Request
+       WWW-Authenticate: Bearer error="invalid_request",
+         error_description="No access token was provided in this request",
+         issuer="https://as.example.com/issuer1"
+
+   The HTTP status code and error string in the response are defined by
+   [RFC6750].
+
+   The issuer parameter MAY be combined with other parameters defined in
+   other extensions, such as the max_age parameter defined by
+   [I-D.ietf-oauth-step-up-authn-challenge].
+
+5.  Changes to the issuer URL
+
+   At any point, for any reason determined by the resource server, the
+   resource server MAY respond with a new WWW-Authenticate challenge,
+   including a new value for the issuer.  If the client receives a WWW-
+   Authenticate response indicating that its current token is no longer
+   valid, it is expected to start a new authorization flow, and SHOULD
+   use the new issuer value indicated in the response.  This enables a
+   resource server to change which authorization server it uses without
+   any other coordination with clients.
+
+6.  Client Identifier and Client Authentication
+
+   The way in which the client identifier is established at the
+   authorization server is out of scope of this specification.
+
+   This specification is intended to be deployed in scenarios where the
+   client has no prior knowledge about the resource server, and the
+   resource server might or might not have prior knowledge about the
+   client.
+
+   There are some existing methods by which an unrecognized client can
+   make use of an authorization server, such as using Dynamic Client
+   Registration [RFC7591] to register the client prior to initiating the
+   authorization flow.  Future extensions may define alternatives, such
+   as using a URL to identify clients.
+
+7.  Security Considerations
+
+7.1.  Server-Side Request Forgery (SSRF)
+
+   The client is expected to fetch the authorization server metadata
+   based on the value of the issuer returned by the resource server.
+   Since this specification is designed to allow clients to interoperate
+   with RSs and ASs it has no prior knowledge of, this opens a risk for
+   SSRF attacks by malicious users or malicious resource servers.
+   Clients SHOULD take appropriate precautions against SSRF attacks,
+   such as blocking requests to internal IP address ranges.  Further
+   recommendations can be found in the OWASP SSRF Prevention Cheat Sheet
+   (https://cheatsheetseries.owasp.org/cheatsheets/
+   Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html).
+
+7.2.  Phishing
+
+   This specification assumes that the desired HTTP resource is
+   identified by a user-selected URL.  If this resource is malicious or
+   compromised, it could mislead the user into revealing their account
+   credentials or authorizing unwanted access to OAuth-controlled
+   capabilities.  This risk is reduced, but not eliminated, by following
+   best practices for OAuth user interfaces, such as providing clear
+   notice to the user, displaying the authorization server's domain
+   name, supporting the use of password managers, and applying heuristic
+   checks such as domain reputation.
+
+   If the client does know the identity of the authorization server in
+   advance, it SHOULD ignore the issuer=... parameter.  Otherwise, an
+   attacker who compromises the resource server could mount a phishing
+   attack via the authorization flow.
+
+8.  Operational Considerations
+
+8.1.  Compatibility with other authentication methods
+
+   Resource servers MAY return other WWW-Authenticate headers indicating
+   various authentication schemes.  This allows the resource server to
+   support clients who may or may not implement this specification, and
+   allows clients to choose their preferred authentication scheme.
+
+9.  IANA Considerations
+
+   TBD
+
+10.  References
+
+10.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC6749]  Hardt, D., Ed., "The OAuth 2.0 Authorization Framework",
+              RFC 6749, DOI 10.17487/RFC6749, October 2012,
+              <https://www.rfc-editor.org/rfc/rfc6749>.
+
+   [RFC6750]  Jones, M. and D. Hardt, "The OAuth 2.0 Authorization
+              Framework: Bearer Token Usage", RFC 6750,
+              DOI 10.17487/RFC6750, October 2012,
+              <https://www.rfc-editor.org/rfc/rfc6750>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8414]  Jones, M., Sakimura, N., and J. Bradley, "OAuth 2.0
+              Authorization Server Metadata", RFC 8414,
+              DOI 10.17487/RFC8414, June 2018,
+              <https://www.rfc-editor.org/rfc/rfc8414>.
+
+10.2.  Informative References
+
+   [I-D.ietf-oauth-step-up-authn-challenge]
+              Bertocci, V. and B. Campbell, "OAuth 2.0 Step-up
+              Authentication Challenge Protocol", Work in Progress,
+              Internet-Draft, draft-ietf-oauth-step-up-authn-challenge-
+              06, 6 November 2022,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-oauth-
+              step-up-authn-challenge-06>.
+
+   [RFC7591]  Richer, J., Ed., Jones, M., Bradley, J., Machulak, M., and
+              P. Hunt, "OAuth 2.0 Dynamic Client Registration Protocol",
+              RFC 7591, DOI 10.17487/RFC7591, July 2015,
+              <https://www.rfc-editor.org/rfc/rfc7591>.
+
+   [RFC8620]  Jenkins, N. and C. Newman, "The JSON Meta Application
+              Protocol (JMAP)", RFC 8620, DOI 10.17487/RFC8620, July
+              2019, <https://www.rfc-editor.org/rfc/rfc8620>.
+
+Acknowledgments
+
+   The editors of this draft would like to thank the attendees of the
+   IETF 115 OAuth Working Group and HTTP API Working Group where this
+   proposal was initially presented.  The editors would also like to
+   thank....
+
+Authors' Addresses
+
+   Aaron Parecki
+   Okta
+   Email: aaron@parecki.com
+
+
+   Benjamin M. Schwartz
+   Google
+   Email: bemasc@google.com
