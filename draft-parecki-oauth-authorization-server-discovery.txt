@@ -5,8 +5,8 @@
 OAuth Working Group                                           A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Standards Track                          B. M. Schwartz
-Expires: 1 June 2023                                              Google
-                                                        28 November 2022
+Expires: 2 June 2023                                              Google
+                                                        29 November 2022
 
 
                 OAuth 2.0 Authorization Server Discovery
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 June 2023.
+   This Internet-Draft will expire on 2 June 2023.
 
 Copyright Notice
 
