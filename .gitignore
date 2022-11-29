@@ -17,7 +17,8 @@
 /versioned/
 Gemfile.lock
 archive.json
-draft-parecki-authorization-server-discovery.xml
+draft-parecki-oauth-authorization-server-discovery.xml
 package-lock.json
 report.xml
 !requirements.txt
+.DS_Store

@@ -2,11 +2,11 @@
 
 This is the working area for the individual Internet-Draft, "OAuth 2.0 Authorization Server Discovery".
 
-* [Editor's Copy](https://aaronpk.github.io/oauth-authorization-server-discovery/#go.draft-parecki-authorization-server-discovery.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-parecki-authorization-server-discovery)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-parecki-authorization-server-discovery)
+* [Editor's Copy](https://aaronpk.github.io/oauth-authorization-server-discovery/#go.draft-parecki-oauth-authorization-server-discovery.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-parecki-oauth-authorization-server-discovery)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-authorization-server-discovery)
 <!--
-* [Compare Editor's Copy to Individual Draft](https://aaronpk.github.io/oauth-authorization-server-discovery/#go.draft-parecki-authorization-server-discovery.diff)
+* [Compare Editor's Copy to Individual Draft](https://aaronpk.github.io/oauth-authorization-server-discovery/#go.draft-parecki-oauth-authorization-server-discovery.diff)
 -->
 
 ## Contributing
