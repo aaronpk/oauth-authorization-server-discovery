@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-23T01:34:45.177602+00:00",
+  "timestamp": "2024-06-25T01:24:11.091286+00:00",
   "repo": "aaronpk/oauth-authorization-server-discovery",
   "labels": [
     {
@@ -49,7 +49,24 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 2,
+      "id": "I_kwDOIcPxbc6NVgtL",
+      "title": "Token exfiltration by malicious server",
+      "url": "https://github.com/aaronpk/oauth-authorization-server-discovery/issues/2",
+      "state": "OPEN",
+      "author": "randomstuff",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft [discusses a fishing attack](https://www.ietf.org/archive/id/draft-parecki-oauth-authorization-server-discovery-00.html#name-phishing) where a malicious resource server redirects the user to a fake malicious authorization server in order to obtain the user's credentials.\r\n\r\nAnother attack scenario is when a malicious server announces a valid Authorization Server in order to exfiltrate a user's access token:\r\n\r\n1. user points its client application to `https://evil/`;\r\n2. the user's client makes a request to ``https://evil/`;\r\n3. the evil server responds with `WWW-Authenticate: ... issuer=\"https://as\"`;\r\n4. the client initiates a OAuth flow with the (valid) authorization server;\r\n5. the client obtains an access token from the authorization server;\r\n6. the clients sends this access token to the authorization server;\r\n7. the malicious server can use the access token;\r\n\r\nSome extra steps/verifications/parameters would be needed in order to ensure that the issued access token's audience are properly scoped to the requesting resource server.",
+      "createdAt": "2024-06-24T22:37:22Z",
+      "updatedAt": "2024-06-24T22:37:22Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": [
     {
       "number": 1,
