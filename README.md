@@ -1,3 +1,9 @@
+This draft has been incorporated into OAuth Protected Resource Metadata and is now archived.
+
+https://datatracker.ietf.org/doc/draft-ietf-oauth-resource-metadata/
+
+
+
 # OAuth 2.0 Authorization Server Discovery
 
 This is the working area for the individual Internet-Draft, "OAuth 2.0 Authorization Server Discovery".
